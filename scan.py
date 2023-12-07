@@ -23,6 +23,6 @@ try:
                 for match in matches:
                     print(f"- Rule: [bold yellow]{match.rule}[/bold yellow]")
     if a == 0:
-        print(\n\n[bold green]       ||>>> No Malware Detected <<<||[/bold green]\n\n)
+        print("\n\n[bold green]       ||>>> No Malware Detected <<<||[/bold green]\n\n")
 except:
     print("[bold red][*]something went wrong![/bold red] \n\n[bold green]python3[/bold green] [bold yellow]boldscan.py[/bold yellow] [bold cyan]{file to scan}[/bold cyan]")
