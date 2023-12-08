@@ -26,9 +26,9 @@ YaraGuard's operation is centered around the execution of custom YARA rules duri
 
 To use YaraGuard, ensure that you have the following dependencies installed:
 
-- [yara-python](https://github.com/VirusTotal/yara-python): YARA is a pattern matching tool used for malware identification. Install using: `pip3 install yara-python`
+- [yara-python](https://github.com/VirusTotal/yara-python): YARA is a pattern matching tool used for malware identification.
     
-- [rich](https://github.com/willmcgugan/rich): Rich is a Python library for rich text and beautiful formatting in the terminal. Install using: `pip3 install rich`
+- [rich](https://github.com/willmcgugan/rich): Rich is a Python library for rich text and beautiful formatting in the terminal.
     
 ```
 cd YaraGuard
