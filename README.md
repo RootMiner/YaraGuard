@@ -48,6 +48,14 @@ This command initiates a scan on the specified file, providing real-time feedbac
 
 Contributions to YaraGuard are welcome. If you encounter issues or have suggestions for improvements, feel free to open an issue or submit a pull request.
 
+## Contributors
+
+A big thank you to the contributors who have helped make YaraGuard even better!
+
+<a href="https://github.com/MY7H404/YaraGuard/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=MY7H404/YaraGuard" />
+</a>
+
 ## License
 
 This project is licensed under the [GNU General Public License v3.0](https://github.com/MY7H404/YaraGuard/blob/main/LICENSE).
