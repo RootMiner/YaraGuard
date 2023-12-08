@@ -4,11 +4,9 @@ YaraGuard is an advanced malware analysis tool designed to empower users in the 
 
 ## Key Features
 
-- **Custom YARA Rules:** YaraGuard incorporates handcrafted YARA rules, meticulously designed to identify nuanced patterns indicative of malicious content. These rules enable the tool to go beyond traditional scanning methods, offering a deeper level of analysis.
+- **Custom YARA Rules:** YaraGuard incorporates a diverse set of YARA rules, including custom-crafted ones meticulously designed for precision. Special thanks to the countless individuals and organizations whose publicly available YARA rules have been incorporated into this tool, contributing to its comprehensive malware detection capabilities.
     
 - **Precision Scanning:** By leveraging the power of YARA rules, YaraGuard achieves precision scanning, accurately pinpointing potential threats within files. The tool's enhanced detection capabilities make it a valuable asset for security professionals and enthusiasts alike.
-    
-- **User-Friendly Interface:** Despite its advanced capabilities, YaraGuard maintains a user-friendly interface. The simplicity of the command-line format (`python3 boldscan.py {file_to_scan}`) ensures accessibility for both seasoned cybersecurity experts and those new to malware analysis.
 
 - **YaraGuard** supports analysis for a wide range of file formats
     
