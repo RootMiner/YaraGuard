@@ -1,6 +1,6 @@
 # YaraGuard - Unleashing the Power of YARA Rules in Malicious File Scanning
 
-YaraGuard is an advanced malware analysis tool designed to empower users in the relentless pursuit of securing digital environments. At its core, YaraGuard utilizes custom-crafted YARA rules, providing a sophisticated and effective means of scanning files for potential threats.
+YaraGuard is an advanced malware analysis tool designed to empower users in the relentless pursuit of securing digital environments. At its core, YaraGuard utilizes YARA rules, providing a sophisticated and effective means of scanning files for potential threats.
 
 ## Key Features
 
