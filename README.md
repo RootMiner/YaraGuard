@@ -29,6 +29,7 @@ To use YaraGuard, ensure that you have the following dependencies installed:
 - [rich](https://github.com/willmcgugan/rich): Rich is a Python library for rich text and beautiful formatting in the terminal.
     
 ```
+git clone https://github.com/MY7H404/YaraGuard.git
 cd YaraGuard
 pip3 install yara-python / or ( pip install -U git+https://github.com/VirusTotal/yara-python )
 pip3 install rich
