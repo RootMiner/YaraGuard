@@ -9,28 +9,37 @@ YaraGuard is an advanced malware analysis tool designed to empower users in the 
 - **Precision Scanning:** By leveraging the power of YARA rules, YaraGuard achieves precision scanning, accurately pinpointing potential threats within files. The tool's enhanced detection capabilities make it a valuable asset for security professionals and enthusiasts alike.
     
 - **User-Friendly Interface:** Despite its advanced capabilities, YaraGuard maintains a user-friendly interface. The simplicity of the command-line format (`python3 boldscan.py {file_to_scan}`) ensures accessibility for both seasoned cybersecurity experts and those new to malware analysis.
+
+- **YaraGuard** supports analysis for a wide range of file formats
     
 - **Threat Intelligence:** YaraGuard goes beyond mere identification of threats; it furnishes valuable insights into the intricate nature of potential malicious content. The generated reports, exemplified below, shedding light on the characteristics and behaviors of identified threats:
 
 ![screenshot-1](https://github.com/MY7H404/YaraGuard/blob/main/screenshot-1.png)
 
+
 ## How It Works
 
-YaraGuard's operation is centered around the execution of custom YARA rules during the scanning process. When invoked with the command `python3 boldscan.py {file_to_scan}`, the tool dynamically applies these rules to scrutinize the specified file for patterns associated with malware. The result is a comprehensive analysis report, detailing any identified threats.
+YaraGuard's operation is centered around the execution of custom YARA rules during the scanning process. When invoked with the command `python3 scan.py {file_to_scan}`, the tool dynamically applies these rules to scrutinize the specified file for patterns associated with malware. The result is a comprehensive analysis report, detailing any identified threats.
+
 
 ## Requirements
 
 To use YaraGuard, ensure that you have the following dependencies installed:
 
-- [yara-python](https://github.com/VirusTotal/yara-python): YARA is a pattern matching tool used for malware identification. Install using: `pip install yara-python`
+- [yara-python](https://github.com/VirusTotal/yara-python): YARA is a pattern matching tool used for malware identification. Install using: `pip3 install yara-python`
     
-- [rich](https://github.com/willmcgugan/rich): Rich is a Python library for rich text and beautiful formatting in the terminal. Install using: `pip install rich`
+- [rich](https://github.com/willmcgugan/rich): Rich is a Python library for rich text and beautiful formatting in the terminal. Install using: `pip3 install rich`
     
-
+```
+cd YaraGuard
+pip3 install yara-python / or ( pip install -U git+https://github.com/VirusTotal/yara-python )
+pip3 install rich
+python3 scan.py {file_to_scan}
+```
 ## Example
 
 ```
-python3 boldscan.py sample_file.exe
+python3 scan.py file_to_scan
 ```
 
 This command initiates a scan on the specified file, providing real-time feedback on potential malicious content detected by YARA rules.
