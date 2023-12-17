@@ -9,7 +9,9 @@ from werkzeug.utils import secure_filename
 class Outpost:
     def __init__(self):
         self.outposts = []
-
+        global outpost
+        outpost = self.outposts
+        
     def add_outpost(self, data):
         self.outposts.append(data)
 
@@ -20,24 +22,31 @@ def scan(file_to_scan):
         x = True
         dir_name = './rules/'
 
+        outpost.clear()
+
         for file in os.listdir(dir_name):
             file_path = dir_name + file
 
             rules = yara.compile(filepath=file_path)
 
             matches = rules.match(file_to_scan)
-
+            
             if matches and x == True:
-                execute_outposts.add_outpost("malware detected")
+                execute_outposts.add_outpost(f"\nMALWARE DETECTED\n")
                 execute_outposts.add_outpost(f"the file {file_to_scan}")
                 x = False
             if matches:
                 for match in matches:
                     execute_outposts.add_outpost(f"- Rule: {match.rule}")
+        
+        
                         
         if x == True:
-            execute_outposts.add_outpost("no malware detected")
+            outpost.clear()
+            execute_outposts.add_outpost("NO MALWARE DETECTED")
+            
     except:
+        outpost.clear()
         execute_outposts.add_outpost("something went wrong")
 
 
