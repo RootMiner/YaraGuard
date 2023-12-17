@@ -7,26 +7,32 @@ from flask import Flask, flash, request, redirect, url_for, send_from_directory,
 
 
 class Outpost:
-    def __init__(self): self.outposts = ""
+    def __init__(self): self.outposts = []
+
     def add_outpost(self, print_statement):
-        self.outposts = self.outposts + print_statement
+        self.outposts.append(print_statement)
+
 
 execute_outposts = Outpost()
 
 
-def scanYara (file_path) : 
+def scanYara(file_path):
     global isYara
     isYara = False
     isYara = yaraScan(file_path)
-    if isYara: execute_outposts.add_outpost("|| MALWARE DETECTED || ---- By YARA RULE ||")
+    if isYara:
+        execute_outposts.add_outpost(
+            "|| MALWARE DETECTED || ---- By YARA RULE ||")
 
 
 def scanVTotal(malfile_path):
-    global isVT  
+    global isVT
     isVT = False
     file_hash = fileHasher(malfile_path)
     isVT = virusTotalWeb(file_hash)
-    if isVT: execute_outposts.add_outpost("|| MALWARE DETECTED  || ---- By VIRUS TOTAL ||")
+    if isVT:
+        execute_outposts.add_outpost(
+            "|| MALWARE DETECTED  || ---- By VIRUS TOTAL ||")
 
 
 UPLOAD_FOLDER = './uploads/'
@@ -43,7 +49,6 @@ def download_file(name):
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():
     try:
-        execute_outposts.outposts = ""
         if request.method == 'POST':
 
             if 'file' not in request.files:
@@ -54,7 +59,7 @@ def upload_file():
             if file.filename == '':
                 flash('No selected file')
                 return redirect(request.url)
-            
+
             if file:
                 filename = secure_filename(file.filename)
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
@@ -63,14 +68,17 @@ def upload_file():
                 scanYara("." + malfile_path)
                 scanVTotal("." + malfile_path)
                 os.remove("." + malfile_path)
-                
+
             if isVT == False and isYara == False:
                 execute_outposts.outposts == ""
                 execute_outposts.add_outpost("|| MALWARE NOT DETECTED ||")
-                    
-    except: execute_outposts.outposts == ""; execute_outposts.add_outpost("[!] SOMETHING WENT WRONG ")
+
+    except:
+        if not execute_outposts.outposts:
+            execute_outposts.add_outpost("[!] SOMETHING WENT WRONG ")
 
     return render_template('index.html', output=execute_outposts.outposts)
+
 
 if __name__ == '__main__':
     app.run(host="localhost", port=8000)
