@@ -7,8 +7,8 @@ from werkzeug.utils import secure_filename
 class Outpost:
     def __init__(self):
         self.outposts = ""
-    def add_outpost(self, data):
-        self.outposts = self.outposts + data
+    def add_outpost(self, print_statement):
+        self.outposts = self.outposts + print_statement
 
 execute_outposts = Outpost()
 
