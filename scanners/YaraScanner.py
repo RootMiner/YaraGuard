@@ -9,8 +9,9 @@ def yaraScan(file_to_scan):
             rules = yara.compile(filepath=file_path)
 
             matches = rules.match(file_to_scan)
-
-            if matches : return True
-            else: return False
-
-            # for match in matches: print("- Rule", match)
+            for match in matches:
+                try:
+                    if match : return True
+                    else: return False
+                except:
+                    return False

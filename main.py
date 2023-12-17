@@ -72,9 +72,12 @@ def upload_file():
                 scanVTotal("." + malfile_path)
                 os.remove("." + malfile_path)
 
-            if isVT == False and isYara == False:
+            print(isVT, isYara)
+
+            if isVT == False:
                 execute_outposts.outposts.clear()
                 execute_outposts.add_outpost("|| MALWARE NOT DETECTED ||")
+
 
     except:
         if not execute_outposts.outposts:
