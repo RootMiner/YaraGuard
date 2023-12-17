@@ -5,6 +5,16 @@ from rich import print
 from flask import Flask, flash, request, redirect, url_for, send_from_directory, render_template
 from werkzeug.utils import secure_filename
 
+
+class Outpost:
+    def __init__(self):
+        self.outposts = []
+
+    def add_outpost(self, data):
+        self.outposts.append(data)
+
+execute_outposts = Outpost()
+
 def scan(file_to_scan):
     try:
         x = True
@@ -18,17 +28,17 @@ def scan(file_to_scan):
             matches = rules.match(file_to_scan)
 
             if matches and x == True:
-                print("\n\n[bold red]       ||>>> Malware Detected <<<||[/bold red]\n\n")
-                print(f"[bold red][+][/bold red] the file [bold green]{file_to_scan}[/bold green] matches the [bold cyan]Yara rules[/bold cyan]:")
+                execute_outposts.add_outpost("malware detected")
+                execute_outposts.add_outpost(f"the file {file_to_scan}")
                 x = False
             if matches:
                 for match in matches:
-                    print(f"- Rule: [bold yellow]{match.rule}[/bold yellow]")
+                    execute_outposts.add_outpost(f"- Rule: {match.rule}")
                         
         if x == True:
-            print("\n\n[bold green]       ||>>> No Malware Detected <<<||[/bold green]\n\n")
+            execute_outposts.add_outpost("no malware detected")
     except:
-        print("[bold red][*]something went wrong![/bold red] \n\n[bold green]python3[/bold green] [bold yellow]scan.py[/bold yellow] [bold cyan]{file to scan}[/bold cyan]")
+        execute_outposts.add_outpost("something went wrong")
 
 
 UPLOAD_FOLDER = './uploads/'
@@ -59,7 +69,7 @@ def upload_file():
             scan("." + malfile_path)
             os.remove("." + malfile_path)
 
-    return render_template('index.html')
+    return render_template('index.html', output=execute_outposts.outposts)
 
 
 
