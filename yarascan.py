@@ -7,9 +7,8 @@ from werkzeug.utils import secure_filename
 class Outpost:
     def __init__(self):
         self.outposts = ""
-        
     def add_outpost(self, data):
-        self.outposts = self.outposts + "\n" + data
+        self.outposts = self.outposts + data
 
 execute_outposts = Outpost()
 
@@ -17,6 +16,8 @@ def scan(file_to_scan):
     try:
         x = True
         dir_name = './rules/'
+
+        execute_outposts.outposts = ""
 
         for file in os.listdir(dir_name):
             file_path = dir_name + file
@@ -34,9 +35,11 @@ def scan(file_to_scan):
                     execute_outposts.add_outpost(f"- Rule: {match.rule}")
         
         if x == True:
+            execute_outposts.outposts = ""
             execute_outposts.add_outpost("||NO MALWARE DETECTED||")
-            
+
     except:
+        execute_outposts.outposts = ""
         execute_outposts.add_outpost("[*] SOMETHING WENT WRONG...")
 
 
@@ -69,8 +72,6 @@ def upload_file():
             os.remove("." + malfile_path)
 
     return render_template('index.html', output=execute_outposts.outposts)
-
-
 
 if __name__ == '__main__':
     app.run(host="localhost", port=8000)
