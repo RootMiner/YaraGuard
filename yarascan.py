@@ -54,22 +54,25 @@ def download_file(name):
 
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():
-    if request.method == 'POST':
-        
-        if 'file' not in request.files:
-            flash('No file part')
-            return redirect(request.url)
-        file = request.files['file']
+    try:
+        if request.method == 'POST':
+            
+            if 'file' not in request.files:
+                flash('No file part')
+                return redirect(request.url)
+            file = request.files['file']
 
-        if file.filename == '':
-            flash('No selected file')
-            return redirect(request.url)
-        if file:
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            malfile_path = url_for('download_file', name=filename)
-            scan("." + malfile_path)
-            os.remove("." + malfile_path)
+            if file.filename == '':
+                flash('No selected file')
+                return redirect(request.url)
+            if file:
+                filename = secure_filename(file.filename)
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                malfile_path = url_for('download_file', name=filename)
+                scan("." + malfile_path)
+                os.remove("." + malfile_path)
+    except:
+        pass
 
     return render_template('index.html', output=execute_outposts.outposts)
 
