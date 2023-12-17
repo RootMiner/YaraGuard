@@ -12,7 +12,7 @@ YaraGuard is an advanced malware analysis tool designed to empower users in the 
     
 - **Threat Intelligence:** YaraGuard goes beyond mere identification of threats; it furnishes valuable insights into the intricate nature of potential malicious content. The generated reports, exemplified below, shedding light on the characteristics and behaviors of identified threats:
 
-![screenshot-1](https://github.com/MY7H404/YaraGuard/blob/main/screenshot-1.png)
+![screenshot-1](https://github.com/MY7H404/YaraGuard/blob/main/assets/screenshot-1.png)
 
 
 ## How It Works
