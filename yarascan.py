@@ -1,19 +1,15 @@
 import os
 import yara
-from sys import argv
-from rich import print
 from flask import Flask, flash, request, redirect, url_for, send_from_directory, render_template
 from werkzeug.utils import secure_filename
 
 
 class Outpost:
     def __init__(self):
-        self.outposts = []
-        global outpost
-        outpost = self.outposts
+        self.outposts = ""
         
     def add_outpost(self, data):
-        self.outposts.append(data)
+        self.outposts = self.outposts + "\n" + data
 
 execute_outposts = Outpost()
 
@@ -21,8 +17,6 @@ def scan(file_to_scan):
     try:
         x = True
         dir_name = './rules/'
-
-        outpost.clear()
 
         for file in os.listdir(dir_name):
             file_path = dir_name + file
@@ -32,22 +26,18 @@ def scan(file_to_scan):
             matches = rules.match(file_to_scan)
             
             if matches and x == True:
-                execute_outposts.add_outpost(f"\nMALWARE DETECTED\n")
-                execute_outposts.add_outpost(f"the file {file_to_scan}")
+                execute_outposts.add_outpost("||MALWARE DETECTED||")
+                execute_outposts.add_outpost(f"[+] {file_to_scan} file scanned!")
                 x = False
             if matches:
                 for match in matches:
                     execute_outposts.add_outpost(f"- Rule: {match.rule}")
         
-        
-                        
         if x == True:
-            outpost.clear()
-            execute_outposts.add_outpost("NO MALWARE DETECTED")
+            execute_outposts.add_outpost("||NO MALWARE DETECTED||")
             
     except:
-        outpost.clear()
-        execute_outposts.add_outpost("something went wrong")
+        execute_outposts.add_outpost("[*] SOMETHING WENT WRONG...")
 
 
 UPLOAD_FOLDER = './uploads/'
