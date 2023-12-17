@@ -49,7 +49,10 @@ def download_file(name):
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():
     try:
+
         if request.method == 'POST':
+
+            execute_outposts.outposts.clear()
 
             if 'file' not in request.files:
                 flash('No file part')
@@ -70,11 +73,12 @@ def upload_file():
                 os.remove("." + malfile_path)
 
             if isVT == False and isYara == False:
-                execute_outposts.outposts == ""
+                execute_outposts.outposts.clear()
                 execute_outposts.add_outpost("|| MALWARE NOT DETECTED ||")
 
     except:
         if not execute_outposts.outposts:
+            execute_outposts.outposts.clear()
             execute_outposts.add_outpost("[!] SOMETHING WENT WRONG ")
 
     return render_template('index.html', output=execute_outposts.outposts)
