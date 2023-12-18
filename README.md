@@ -52,6 +52,12 @@ docker build --no-cache -t yaraguard .
 docker run --rm -p 5000:5000 yaraguard
 ```
 
+*You can also pull the image directly from the docker hub*
+
+```
+docker pull docker pull japurando07/yaraguard:v1.0
+```
+
 ## Contribution
 
 Contributions to YaraGuard are welcome. If you encounter issues or have suggestions for improvements, feel free to open an issue or submit a pull request.
