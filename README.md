@@ -43,6 +43,15 @@ python3 scan.py file_to_scan
 
 This command initiates a scan on the specified file, providing real-time feedback on potential malicious content detected by YARA rules.
 
+## Run Using Docker
+
+Hoping that docker is already installed and ready to use, run the following commands
+
+```
+docker build --no-cache -t yaraguard .
+docker run --rm -p 5000:5000 yaraguard
+```
+
 ## Contribution
 
 Contributions to YaraGuard are welcome. If you encounter issues or have suggestions for improvements, feel free to open an issue or submit a pull request.

@@ -50,5 +50,7 @@ def virusTotalWeb(file_hash):
         isMalacious = process_response(response)
         return isMalacious
 
+    # had to return flase cause for some reason, Virus Total is not sending data for 
+    # non mailicious files
     except Exception as e: return False
  
