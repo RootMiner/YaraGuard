@@ -23,6 +23,9 @@ def scanYara(file_path):
     if isYara:
         execute_outposts.add_outpost(
             "|| MALWARE DETECTED || ---- By YARA RULE ||")
+    else:
+        execute_outposts.add_outpost(
+            "|| MALWARE NOT DETECTED || ---- By YARA RULE ||")
 
 
 def scanVTotal(malfile_path):
@@ -33,7 +36,9 @@ def scanVTotal(malfile_path):
     if isVT:
         execute_outposts.add_outpost(
             "|| MALWARE DETECTED  || ---- By VIRUS TOTAL ||")
-
+    else:
+        execute_outposts.add_outpost(
+            "|| MALWARE NOT DETECTED || ---- By VIRUS TOTAL ||")
 
 UPLOAD_FOLDER = './uploads/'
 
@@ -71,13 +76,6 @@ def upload_file():
                 scanYara("." + malfile_path)
                 scanVTotal("." + malfile_path)
                 os.remove("." + malfile_path)
-
-            print(isVT, isYara)
-
-            if isVT == False:
-                execute_outposts.outposts.clear()
-                execute_outposts.add_outpost("|| MALWARE NOT DETECTED ||")
-
 
     except:
         if not execute_outposts.outposts:
