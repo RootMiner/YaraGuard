@@ -56,7 +56,10 @@ docker run --rm -p 5000:5000 yaraguard
 
 ```
 docker pull docker pull japurando07/yaraguard:v1.0
+docker run -d --rm -p 5000:5000 japurando07/yaraguard:v1.0
 ```
+
+Now we can access the site from host by visiting `http://localhost:500`
 
 ## Contribution
 
