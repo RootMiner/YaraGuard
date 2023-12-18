@@ -7,7 +7,6 @@ SEARCH_URL = "https://www.virustotal.com/ui/search"
 # Define headers to match the intercepted request
 headers = vtheader
 
-file_hash = "000e565854d24a54e6a853d7119dbe598a329b0340aa044f222e1b02c371c599"
 
 def analysis_stats (data) :
     analysis_results = data.get("data", [])[0].get("attributes", {}).get("last_analysis_stats", []).get("malicious")
@@ -49,8 +48,7 @@ def virusTotalWeb(file_hash):
         # Make a GET request to the search URL with headers and parameters
         response = requests.get(SEARCH_URL, headers=headers, params=params)
         isMalacious = process_response(response)
-
         return isMalacious
 
-    except Exception as e: print(f"An error occurred: {str(e)}")
+    except Exception as e: return False
  

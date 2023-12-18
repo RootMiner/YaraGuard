@@ -8,7 +8,6 @@ from flask import Flask, flash, request, redirect, url_for, send_from_directory,
 
 class Outpost:
     def __init__(self): self.outposts = []
-
     def add_outpost(self, print_statement):
         self.outposts.append(print_statement)
 
@@ -21,8 +20,7 @@ def scanYara(file_path):
     isYara = False
     isYara = yaraScan(file_path)
     if isYara:
-        execute_outposts.add_outpost(
-            "|| MALWARE DETECTED || ---- By YARA RULE ||")
+        execute_outposts.add_outpost("|| MALWARE DETECTED -- By YARA RULE")
 
 
 def scanVTotal(malfile_path):
@@ -31,8 +29,7 @@ def scanVTotal(malfile_path):
     file_hash = fileHasher(malfile_path)
     isVT = virusTotalWeb(file_hash)
     if isVT:
-        execute_outposts.add_outpost(
-            "|| MALWARE DETECTED  || ---- By VIRUS TOTAL ||")
+        execute_outposts.add_outpost("|| MALWARE DETECTED  -- By VIRUS TOTAL")
 
 
 UPLOAD_FOLDER = './uploads/'
@@ -72,19 +69,17 @@ def upload_file():
                 scanVTotal("." + malfile_path)
                 os.remove("." + malfile_path)
 
-            print(isVT, isYara)
-
             if isVT == False:
                 execute_outposts.outposts.clear()
-                execute_outposts.add_outpost("|| MALWARE NOT DETECTED ||")
+                execute_outposts.add_outpost("|| NO MALWARE DETECTED ||")
 
 
     except:
         if not execute_outposts.outposts:
             execute_outposts.outposts.clear()
-            execute_outposts.add_outpost("[!] SOMETHING WENT WRONG ")
+            execute_outposts.add_outpost("[!] PLEASE SELECT A FILE TO UPLOAD ")
 
-    return render_template('index.html', output=execute_outposts.outposts)
+    return render_template('app/index.html', output=execute_outposts.outposts)
 
 
 if __name__ == '__main__':
