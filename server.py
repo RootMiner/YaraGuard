@@ -3,6 +3,7 @@ from assets.fileHasher import fileHasher
 from werkzeug.utils import secure_filename
 from scanners.YaraScanner import yaraScan
 from scanners.VTscanner import virusTotalWeb
+from scanners.VTscanner import virusTotalAPI
 from flask import Flask, flash, request, redirect, url_for, send_from_directory, render_template
 
 
@@ -27,7 +28,10 @@ def scanVTotal(malfile_path):
     global isVT
     isVT = False
     file_hash = fileHasher(malfile_path)
+    # use one at a time, cause api gives rate limit and web gives captha block
     isVT = virusTotalWeb(file_hash)
+    # isVT = virusTotalAPI(file_hash)
+
     if isVT:
         execute_outposts.add_outpost("|| MALWARE DETECTED  -- By VIRUS TOTAL")
 
@@ -46,7 +50,6 @@ def download_file(name):
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():
     try:
-
         if request.method == 'POST':
 
             execute_outposts.outposts.clear()
@@ -73,14 +76,12 @@ def upload_file():
                 execute_outposts.outposts.clear()
                 execute_outposts.add_outpost("|| NO MALWARE DETECTED ||")
 
-
     except:
         if not execute_outposts.outposts:
             execute_outposts.outposts.clear()
             execute_outposts.add_outpost("[!] PLEASE SELECT A FILE TO UPLOAD ")
 
-    return render_template('app/index.html', output=execute_outposts.outposts)
+    return render_template('web/index.html', output=execute_outposts.outposts)
 
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0')
+if __name__ == '__main__': app.run(host='0.0.0.0')

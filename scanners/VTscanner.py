@@ -1,11 +1,9 @@
+import os
 import json
 import requests
+from dotenv import load_dotenv
 from assets.headers import vtheader
-
-# Define the URL for the search request
-SEARCH_URL = "https://www.virustotal.com/ui/search"
-# Define headers to match the intercepted request
-headers = vtheader
+from virus_total_apis import PublicApi as VirusTotalToken
 
 
 def analysis_stats (data) :
@@ -33,8 +31,27 @@ def process_response(response):
         print(f"Error: {response.status_code} - {response.text}")
 
 
+def virusTotalAPI(file_hash):
+
+    # Virus Total API key token
+    load_dotenv()
+    TOKEN = os.getenv('VIRUSTOTAL_TOKEN')
+    virustotal = VirusTotalToken(TOKEN)
+
+    response = virustotal.get_file_report(file_hash)
+    json_data = json.loads(json.dumps(response))
+    positives = json_data.get("results").get("positives")
+    if positives: return True
+    else: return False
+
+
 # this somewhat bypasses the api restriction somewhat maybe
 def virusTotalWeb(file_hash):
+
+    # Define the URL for the search request
+    SEARCH_URL = "https://www.virustotal.com/ui/search"
+    # Define headers to match the intercepted request
+    headers = vtheader
 
     isMalacious = False
     # Define the parameters for the search query
@@ -52,5 +69,5 @@ def virusTotalWeb(file_hash):
 
     # had to return flase cause for some reason, Virus Total is not sending data for 
     # non mailicious files
-    except Exception as e: return False
+    except Exception: return False
  
