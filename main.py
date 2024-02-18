@@ -27,19 +27,6 @@ def scanYara(file_path):
         execute_outposts.add_outpost(
             "|| MALWARE NOT DETECTED || ---- By YARA RULE ||")
 
-
-def scanVTotal(malfile_path):
-    global isVT
-    isVT = False
-    file_hash = fileHasher(malfile_path)
-    isVT = virusTotalWeb(file_hash)
-    if isVT:
-        execute_outposts.add_outpost(
-            "|| MALWARE DETECTED  || ---- By VIRUS TOTAL ||")
-    else:
-        execute_outposts.add_outpost(
-            "|| MALWARE NOT DETECTED || ---- By VIRUS TOTAL ||")
-
 UPLOAD_FOLDER = './uploads/'
 
 app = Flask(__name__, template_folder='./')
