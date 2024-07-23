@@ -1,3 +1,6 @@
+> [!CAUTION]
+> The Scan is not working properly hence BROKEN, we are working on it  
+
 # YaraGuard - Unleashing the Power of YARA Rules in Malicious File Scanning
 
 YaraGuard is an advanced malware analysis tool designed to empower users in the relentless pursuit of securing digital environments. At its core, YaraGuard utilizes YARA rules, providing a sophisticated and effective means of scanning files for potential threats.
@@ -12,7 +15,7 @@ YaraGuard is an advanced malware analysis tool designed to empower users in the 
     
 - **Threat Intelligence:** YaraGuard goes beyond mere identification of threats; it furnishes valuable insights into the intricate nature of potential malicious content. The generated reports, exemplified below, shedding light on the characteristics and behaviors of identified threats:
 
-![screenshot-1](https://github.com/MY7H404/YaraGuard/blob/main/assets/screenshot-1.png)
+![screenshot-1](assets/screenshot.png)
 
 
 ## How It Works
@@ -59,7 +62,7 @@ docker pull docker pull japurando07/yaraguard:v1.0
 docker run -d --rm -p 5000:5000 japurando07/yaraguard:v1.0
 ```
 
-Now we can access the site from host by visiting `http://localhost:500`
+Now we can access the site from host by visiting `http://localhost:5000`
 
 ## Contribution
 
