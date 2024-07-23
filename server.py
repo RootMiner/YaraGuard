@@ -1,17 +1,19 @@
 import os
-from assets.fileHasher import fileHasher
 from werkzeug.utils import secure_filename
-from scanners.YaraScanner import yaraScan
-from scanners.VTscanner import virusTotalWeb
-from scanners.VTscanner import virusTotalAPI
 from flask import Flask, flash, request, redirect, url_for, send_from_directory, render_template
+
+# custom import
+from scanners.YaraScanner import yaraScan
+# from assets.fileHasher import fileHasher
+# from scanners.VTscanner import virusTotalWeb
+# from scanners.VTscanner import virusTotalAPI
 
 
 class Outpost:
-    def __init__(self): self.outposts = []
+    def __init__(self): 
+        self.outposts = []
     def add_outpost(self, print_statement):
         self.outposts.append(print_statement)
-
 
 execute_outposts = Outpost()
 
@@ -24,21 +26,21 @@ def scanYara(file_path):
         execute_outposts.add_outpost("|| MALWARE DETECTED -- By YARA RULE")
 
 
-def scanVTotal(malfile_path):
-    global isVT
-    isVT = False
-    file_hash = fileHasher(malfile_path)
-    # use one at a time, cause api gives rate limit and web gives captha block
-    isVT = virusTotalWeb(file_hash)
-    # isVT = virusTotalAPI(file_hash)
+# def scanVTotal(malfile_path):
+#     global isVT
+#     isVT = False
+#     file_hash = fileHasher(malfile_path)
+#     # use one at a time, cause api gives rate limit and web gives captha block
+#     isVT = virusTotalWeb(file_hash)
+#     # isVT = virusTotalAPI(file_hash)
 
-    if isVT:
-        execute_outposts.add_outpost("|| MALWARE DETECTED  -- By VIRUS TOTAL")
+#     if isVT:
+#         execute_outposts.add_outpost("|| MALWARE DETECTED  -- By VIRUS TOTAL")
 
+UPLOAD_FOLDER   = './uploads/'
+TEMPLATE_FOLDER = './template/'
 
-UPLOAD_FOLDER = './uploads/'
-
-app = Flask(__name__, template_folder='./')
+app = Flask(__name__, template_folder=TEMPLATE_FOLDER)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
@@ -47,7 +49,7 @@ def download_file(name):
     return send_from_directory(app.config["UPLOAD_FOLDER"], name)
 
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/', methods=['GET','POST'])
 def upload_file():
     try:
         if request.method == 'POST':
@@ -57,6 +59,7 @@ def upload_file():
             if 'file' not in request.files:
                 flash('No file part')
                 return redirect(request.url)
+            
             file = request.files['file']
 
             if file.filename == '':
@@ -69,10 +72,10 @@ def upload_file():
                 global malfile_path
                 malfile_path = url_for('download_file', name=filename)
                 scanYara("." + malfile_path)
-                scanVTotal("." + malfile_path)
+                # scanVTotal("." + malfile_path)
                 os.remove("." + malfile_path)
 
-            if isVT == False:
+            if isYara == False:
                 execute_outposts.outposts.clear()
                 execute_outposts.add_outpost("|| NO MALWARE DETECTED ||")
 
@@ -81,7 +84,9 @@ def upload_file():
             execute_outposts.outposts.clear()
             execute_outposts.add_outpost("[!] PLEASE SELECT A FILE TO UPLOAD ")
 
-    return render_template('web/index.html', output=execute_outposts.outposts)
+    return render_template('index.html', output=execute_outposts.outposts)
 
 
-if __name__ == '__main__': app.run(host='0.0.0.0')
+if __name__ == '__main__': 
+    app.secret_key = 'test_key'
+    app.run(host='0.0.0.0', debug=True)

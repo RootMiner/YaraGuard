@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>yaraguard</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Silkscreen&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Silkscreen', sans-serif;
+      background: #000000;
+      color: #ffffff;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    canvas.webgl {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: -1;
+      background: #000;
+    }
+
+    div.wrapper {
+      background: whitesmoke;
+      color: black;
+      padding: 3rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 25px;
+      border: 2px solid rgb(0, 0, 0);
+      outline-offset: 4px;
+      outline: 4px solid #ffffff;
+    }
+
+    input::file-selector-button {
+      color: white;
+      font-family: 'Silkscreen', sans-serif;
+      border: 3px solid rgb(0, 0, 0);
+      background: black;
+      padding: 10px 15px;
+      font-size: 15px;
+      margin-right: 15px;
+    }
+
+    input::file-selector-button:hover {
+      background: rgb(255, 255, 255);
+      color: rgb(0, 0, 0);
+    }
+
+    .wrapper input:nth-child(2) {
+      border: 2px solid #000;
+      outline-offset: 3px;
+      outline: 2px solid #000;
+      background: transparent;
+      padding: 5px 15px;
+      font-size: 18px;
+      transition: .2s;
+    }
+
+    .wrapper input:nth-child(2):hover {
+      background-color: rgb(0, 0, 0);
+      color: white;
+      transform: translateY(-5px);
+    }
+
+    #output {
+      background-color: rgb(0, 0, 0);
+      color: white;
+      width: 100%;
+      padding: 7px;
+      border: 2px solid rgb(255, 255, 255);
+      outline-offset: 2px;
+      outline: 3px solid #000000;
+    }
+
+    @media only screen and (max-width: 600px) {
+      div.wrapper {
+        flex-basis: 80%;
+        padding: 3rem 2rem;
+      }
+
+      div.wrapper form {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <canvas class="webgl"></canvas>
+  <div class="wrapper">
+    <h1>YaraGuard</h1>
+    <form method='post' enctype='multipart/form-data'>
+      <input type='file' name='file'>
+      <input id="file-upload" type='submit' value="Upload">
+    </form>
+    <h3>Output:</h3>
+    <div id="output">
+      {% for item in output %}
+      <p>{{ item }}</p>
+      {% endfor %}
+    </div>
+  </div>
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdnjs.cloudflare.com/ajax/libs/three.js/0.138.3/three.module.min.js",
+        "OrbitControls": "https://unpkg.com/three@0.159.0/examples/jsm/controls/OrbitControls.js"
+      }
+    }
+  </script>
+
+  <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'OrbitControls';
+
+    const size = {
+      width: innerWidth,
+      height: innerHeight
+    };
+
+    const debugObject = {
+      boxCount: 25,
+    };
+
+    if (size.width <= 600) {
+      debugObject.boxSize = {
+        from: 0.02,
+        to: 0.06
+      }
+      debugObject.gridSegments = 50
+      debugObject.boxPositionMultipicant = 0.75
+    } else if (size.width > 600 && size.width <= 767) {
+      debugObject.boxSize = {
+        from: 0.04,
+        to: 0.08
+      }
+      debugObject.gridSegments = 40
+      debugObject.boxPositionMultipicant = 1.2
+    } else if (size.width > 767 && size.width <= 991) {
+      debugObject.boxSize = {
+        from: 0.04,
+        to: 0.08
+      }
+      debugObject.gridSegments = 35
+      debugObject.boxPositionMultipicant = 1.2
+    } else if (size.width > 991 && size.width < 1200) {
+      debugObject.boxSize = {
+        from: 0.05,
+        to: 0.10
+      }
+      debugObject.gridSegments = 20
+      debugObject.boxPositionMultipicant = 1.6
+    } else {
+      debugObject.boxSize = {
+        from: 0.05,
+        to: 0.10
+      }
+      debugObject.gridSegments = 10
+      debugObject.boxPositionMultipicant = 1.6
+    }
+
+    const canvas = document.querySelector('canvas.webgl');
+    const scene = new THREE.Scene();
+
+    const camera = new THREE.PerspectiveCamera(45, size.width / size.height, 1, 1000);
+    camera.position.y = 3;
+    scene.add(camera);
+
+    const controls = new OrbitControls(camera, canvas);
+
+    const grid = new THREE.GridHelper(10, debugObject.gridSegments, 0x222222, 0x222222);
+    scene.add(grid);
+
+    const boxArray = [];
+    const frequencies = [];
+    const scaleSpeeds = [];
+    const scaleValues = [];
+
+    for (let i = 0; i < debugObject.boxCount; i++) {
+      const color = Math.floor(Math.random() * 101) + 100;
+      const size = (Math.random() * (debugObject.boxSize.to - debugObject.boxSize.from)) + debugObject.boxSize.from;
+      const angle = Math.random() * Math.PI * 2;
+      const position = {
+        x: (Math.sin(angle) > 0) ? Math.sin(angle) * debugObject.boxPositionMultipicant + Math.random() : Math.sin(angle) * debugObject.boxPositionMultipicant - Math.random(),
+        z: Math.cos(angle),
+      }
+
+      const box = new THREE.Mesh(
+        new THREE.PlaneGeometry(size, size),
+        new THREE.MeshBasicMaterial({
+          color: new THREE.Color(`rgb(${color}, ${color}, ${color})`)
+        })
+      );
+      box.position.set(position.x, Math.random() * 0.2, position.z);
+      box.rotation.x = - Math.PI / 2;
+
+      boxArray.push(box);
+      frequencies.push(Math.round(Math.random()) ? (Math.random() * 0.0003) + 0.0002 : -((Math.random() * 0.0003) + 0.0002));
+      scaleValues.push([0.001, 0.002, 0.003][Math.floor(Math.random() * 3)]);
+      scaleSpeeds.push(Math.round(Math.random()) ? 1 : -1);
+    }
+    scene.add(...boxArray);
+
+    const renderer = new THREE.WebGLRenderer({
+      canvas,
+      antialias: true,
+    });
+    renderer.setSize(size.width, size.height);
+    renderer.render(scene, camera);
+
+    const clock = new THREE.Clock();
+    const render = () => {
+      requestAnimationFrame(render);
+
+      const elapsedTime = clock.getElapsedTime()
+      for (let i = 0; i < boxArray.length; i++) {
+        const scaleValue = Math.sin(elapsedTime * scaleSpeeds[i]) * scaleValues[i];
+
+        boxArray[i].position.z += Math.sin(elapsedTime) * frequencies[i];
+        boxArray[i].scale.x += scaleValue;
+        boxArray[i].scale.y += scaleValue;
+      }
+
+      renderer.render(scene, camera);
+    }
+    render();
+
+    window.addEventListener("resize", () => {
+      size.width = innerWidth;
+      size.height = innerHeight;
+
+      camera.aspect = size.width / size.height;
+      camera.updateProjectionMatrix();
+
+      renderer.setSize(size.width, size.height);
+      renderer.render(scene, camera);
+    });
+  </script>
+</body>
+
+</html>
